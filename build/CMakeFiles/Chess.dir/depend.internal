@@ -4,18 +4,27 @@
 CMakeFiles/Chess.dir/src/chess/chess.cpp.o
  /home/mauricio/Documents/Chess/src/chess/chess.cpp
  /home/mauricio/Documents/Chess/src/chess/chess.h
- /home/mauricio/Documents/Chess/src/drawer/drawer.h
+ /home/mauricio/Documents/Chess/src/chess/piece.h
+CMakeFiles/Chess.dir/src/chess/piece.cpp.o
+ /home/mauricio/Documents/Chess/src/chess/piece.cpp
+ /home/mauricio/Documents/Chess/src/chess/piece.h
 CMakeFiles/Chess.dir/src/drawer/drawer.cpp.o
  /home/mauricio/Documents/Chess/src/chess/chess.h
+ /home/mauricio/Documents/Chess/src/chess/piece.h
  /home/mauricio/Documents/Chess/src/drawer/drawer.cpp
  /home/mauricio/Documents/Chess/src/drawer/drawer.h
+CMakeFiles/Chess.dir/src/drawer/mbutton.cpp.o
+ /home/mauricio/Documents/Chess/src/drawer/mbutton.cpp
+ /home/mauricio/Documents/Chess/src/drawer/mbutton.h
 CMakeFiles/Chess.dir/src/game/game.cpp.o
  /home/mauricio/Documents/Chess/src/chess/chess.h
+ /home/mauricio/Documents/Chess/src/chess/piece.h
  /home/mauricio/Documents/Chess/src/drawer/drawer.h
  /home/mauricio/Documents/Chess/src/game/game.cpp
  /home/mauricio/Documents/Chess/src/game/game.h
 CMakeFiles/Chess.dir/src/main.cpp.o
  /home/mauricio/Documents/Chess/src/chess/chess.h
+ /home/mauricio/Documents/Chess/src/chess/piece.h
  /home/mauricio/Documents/Chess/src/drawer/drawer.h
  /home/mauricio/Documents/Chess/src/game/game.h
  /home/mauricio/Documents/Chess/src/main.cpp

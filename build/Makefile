@@ -150,6 +150,33 @@ src/chess/chess.cpp.s:
 	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/chess/chess.cpp.s
 .PHONY : src/chess/chess.cpp.s
 
+src/chess/piece.o: src/chess/piece.cpp.o
+
+.PHONY : src/chess/piece.o
+
+# target to build an object file
+src/chess/piece.cpp.o:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/chess/piece.cpp.o
+.PHONY : src/chess/piece.cpp.o
+
+src/chess/piece.i: src/chess/piece.cpp.i
+
+.PHONY : src/chess/piece.i
+
+# target to preprocess a source file
+src/chess/piece.cpp.i:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/chess/piece.cpp.i
+.PHONY : src/chess/piece.cpp.i
+
+src/chess/piece.s: src/chess/piece.cpp.s
+
+.PHONY : src/chess/piece.s
+
+# target to generate assembly for a file
+src/chess/piece.cpp.s:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/chess/piece.cpp.s
+.PHONY : src/chess/piece.cpp.s
+
 src/drawer/drawer.o: src/drawer/drawer.cpp.o
 
 .PHONY : src/drawer/drawer.o
@@ -176,6 +203,33 @@ src/drawer/drawer.s: src/drawer/drawer.cpp.s
 src/drawer/drawer.cpp.s:
 	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/drawer/drawer.cpp.s
 .PHONY : src/drawer/drawer.cpp.s
+
+src/drawer/mbutton.o: src/drawer/mbutton.cpp.o
+
+.PHONY : src/drawer/mbutton.o
+
+# target to build an object file
+src/drawer/mbutton.cpp.o:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/drawer/mbutton.cpp.o
+.PHONY : src/drawer/mbutton.cpp.o
+
+src/drawer/mbutton.i: src/drawer/mbutton.cpp.i
+
+.PHONY : src/drawer/mbutton.i
+
+# target to preprocess a source file
+src/drawer/mbutton.cpp.i:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/drawer/mbutton.cpp.i
+.PHONY : src/drawer/mbutton.cpp.i
+
+src/drawer/mbutton.s: src/drawer/mbutton.cpp.s
+
+.PHONY : src/drawer/mbutton.s
+
+# target to generate assembly for a file
+src/drawer/mbutton.cpp.s:
+	$(MAKE) -f CMakeFiles/Chess.dir/build.make CMakeFiles/Chess.dir/src/drawer/mbutton.cpp.s
+.PHONY : src/drawer/mbutton.cpp.s
 
 src/game/game.o: src/game/game.cpp.o
 
@@ -243,9 +297,15 @@ help:
 	@echo "... src/chess/chess.o"
 	@echo "... src/chess/chess.i"
 	@echo "... src/chess/chess.s"
+	@echo "... src/chess/piece.o"
+	@echo "... src/chess/piece.i"
+	@echo "... src/chess/piece.s"
 	@echo "... src/drawer/drawer.o"
 	@echo "... src/drawer/drawer.i"
 	@echo "... src/drawer/drawer.s"
+	@echo "... src/drawer/mbutton.o"
+	@echo "... src/drawer/mbutton.i"
+	@echo "... src/drawer/mbutton.s"
 	@echo "... src/game/game.o"
 	@echo "... src/game/game.i"
 	@echo "... src/game/game.s"

@@ -5,7 +5,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mauricio/Documents/Chess/src/chess/chess.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/chess/chess.cpp.o"
+  "/home/mauricio/Documents/Chess/src/chess/piece.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/chess/piece.cpp.o"
   "/home/mauricio/Documents/Chess/src/drawer/drawer.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/drawer/drawer.cpp.o"
+  "/home/mauricio/Documents/Chess/src/drawer/mbutton.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/drawer/mbutton.cpp.o"
   "/home/mauricio/Documents/Chess/src/game/game.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/game/game.cpp.o"
   "/home/mauricio/Documents/Chess/src/main.cpp" "/home/mauricio/Documents/Chess/build/CMakeFiles/Chess.dir/src/main.cpp.o"
   )
