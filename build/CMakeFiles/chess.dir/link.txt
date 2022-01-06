@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -pedantic -g -pedantic-errors -pthread   CMakeFiles/chess.dir/src/drawer/drawer.cpp.o CMakeFiles/chess.dir/src/drawer/mbutton.cpp.o CMakeFiles/chess.dir/src/game/game.cpp.o CMakeFiles/chess.dir/src/chess/chess.cpp.o CMakeFiles/chess.dir/src/chess/piece.cpp.o CMakeFiles/chess.dir/src/main.cpp.o  -o chess  -lSDL2 -lSDL2_image 

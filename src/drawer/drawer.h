@@ -2,7 +2,9 @@
 #define DRAWER_H
 #include <SDL2/SDL.h>
 #include <map>
+#include <vector>
 #include "../chess/chess.h"
+#include "mbutton.h"
 
 class Drawer {
 private:
@@ -10,6 +12,10 @@ private:
     SDL_Renderer* gRenderer;
     std::map<char, SDL_Texture*> textures;
     Chess& chess;
+    std::vector<MButton> buttons;
+    int selectedPiece;
+    bool mousePressed;
+    SDL_Point mousePos;
 public:
     Drawer(Chess& chess);
 
@@ -23,7 +29,11 @@ public:
 
     void destroy();
 
+    void handleMouseEvent( SDL_Event* e);
+
     SDL_Texture* loadTexture(std::string path);
+
+    void initializeButtons();
 };
 
 #endif

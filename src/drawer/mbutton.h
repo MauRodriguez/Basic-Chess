@@ -5,22 +5,23 @@
 class MButton{
 private:
     //Top left position
-    int mXPosition;
-    int mYPosition;
+    int XPosition;
+    int YPosition;
 
     //Currently used global sprite
-    int currentSprite;
+    int currentTexture;
+    bool empty;
 public:
     //Initializes internal variables
-    MButton(int currentSprite, int mXPosition, int mYPosition);
+    MButton(int currentTexture, int XPosition, int YPosition, int empty);
 
     ~MButton();
 
-    //Handles mouse event
-    void handleEvent(SDL_Event* e);
+    int getXPosition();
 
-    //Shows button sprite
-    void render();
+    int getYPosition();
+
+    int getTextureType();    
 };
 
 #endif

@@ -13,11 +13,17 @@ Drawer::Drawer(Chess& chess) :
     gWindow(NULL),
     gRenderer(NULL),
     textures(),
-	chess(chess)
+	chess(chess),
+	buttons(),
+	selectedPiece(0),
+	mousePressed(false),
+	mousePos({-1, -1})
 {
     if (!initialize()) {
         std::cout << "[DRAWER] Error initializing SDL\n";
     }
+
+	initializeButtons();
     
     textures[WHITE_BISHOP] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_bishop.png");
     textures[WHITE_KING] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_king.png");
@@ -40,6 +46,68 @@ Drawer::Drawer(Chess& chess) :
 //y = -x + 7
 int YCoordinateConvertor(int i){  
 	return (-i + 7);
+}
+
+void Drawer::initializeButtons(){
+	std::vector<Piece>& pieces = chess.getPieces();
+
+	for(int i = 0; i < pieces.size(); i++){
+		MButton button1(pieces[i].getType(), pieces[i].getCoordinateX() * SQUARE_DIM,
+			YCoordinateConvertor(pieces[i].getCoordinateY())* SQUARE_DIM, false);
+		buttons.push_back(button1);
+	}
+
+	for(int i = 0; i < 8; i ++){
+		for(int j = 2; j < 6; j++){
+			MButton button2(0, i * SQUARE_DIM, j * SQUARE_DIM, true);
+			buttons.push_back(button2);
+		}
+	}	
+}
+
+void Drawer::handleMouseEvent( SDL_Event* e){
+
+	mousePos = { (e->motion.x) - 62, (e->motion.y) - 62};
+	SDL_Point mousePosOffset = { (e->motion.x) , (e->motion.y) };
+
+
+	//std::cout<<"mousePosition" << mousePos.x << " " << mousePos.y << std::endl;
+
+
+	//Mouse is inside button					
+	//Set mouse over sprite
+	switch( e->type )
+	{
+		case SDL_MOUSEMOTION:
+		if(selectedPiece != 0 && mousePressed){			
+			render(mousePos.x, mousePos.y, SQUARE_DIM, SQUARE_DIM, textures[selectedPiece]);
+			SDL_RenderPresent( gRenderer );
+		}
+		break;
+	
+		case SDL_MOUSEBUTTONDOWN:		
+		if (!mousePressed && e->button.button == SDL_BUTTON_LEFT)
+		{			
+			mousePressed = true;
+			
+			for(int i = 0; i < buttons.size(); i++){
+				SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
+								SQUARE_DIM, SQUARE_DIM};
+				if (SDL_PointInRect(&mousePosOffset, &rect)){
+					selectedPiece = buttons[i].getTextureType();					
+					break;
+				}
+			}
+		}
+		break;
+		
+		case SDL_MOUSEBUTTONUP:
+			mousePressed = false;
+			mousePos = {-1, -1};
+			selectedPiece = 0;
+		break;
+	}		
+	
 }
 
 bool Drawer::initialize(){
@@ -145,6 +213,10 @@ void Drawer::draw(){
 		}
 	}
 
+	if(mousePos.x >= 0 && mousePos.y >= 0 && selectedPiece != 0){
+		render(mousePos.x, mousePos.y, SQUARE_DIM, SQUARE_DIM, textures[selectedPiece]);
+	}
+
     //Update screen
     SDL_RenderPresent( gRenderer );
 }
@@ -192,9 +264,7 @@ SDL_Texture* Drawer::loadTexture( std::string path ){
 	return newTexture;
 }
 
-Drawer::~Drawer(){
-    destroy();
-}
+Drawer::~Drawer(){}
 
 void Drawer::render(int x, int y, int width, int height, SDL_Texture* texture){
 	SDL_Rect renderQuad = {x, y, width, height};
