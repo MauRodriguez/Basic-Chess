@@ -1,5 +1,6 @@
 #include "chess.h"
 #include "piece.h"
+#include <cmath>
 
 Chess::Chess(int colour) :
     colour(WHITE),
@@ -109,6 +110,235 @@ void Chess::setBlackBoard(){
     }
 }
 
-void Chess::bestMovement(){}
+void Chess::bestMovement(){} //heres where the IA goes
 
-void Chess::hasWon(){}
+bool Chess::possibleMove(int initialX, int initialY, int initialType, int finalX, int finalY, int finalType){
+    switch(abs(initialType)){
+        case WHITE_BISHOP:
+            return bishopMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+        case WHITE_KING:
+            return kingMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+        case WHITE_KNIGHT:
+            return knightMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+        case WHITE_PAWN:
+            return pawnMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+        case WHITE_QUEEN:
+            return queenMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+        case WHITE_ROOK:
+            return rookMoves(initialX, initialY, initialType, finalX, finalY, finalType);
+
+        default:
+            return false;
+    }
+
+}
+
+void Chess::eliminatePiece(int x, int y){
+    for(int i = 0; i < pieces.size(); i++){
+        if(pieces[i].getCoordinateX() == x && pieces[i].getCoordinateY() == y){
+            pieces.erase(pieces.begin() + i);
+            break;
+        }
+    }
+}
+
+void Chess::addPiece(int x, int y, int type){
+    Piece newPiece(x, y, type);
+    pieces.push_back(newPiece);
+}
+
+bool Chess::bishopMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    }
+
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+
+    if(abs(stepX) != abs(stepY)){
+        return false;
+    }
+
+    if(!checkDiagonal(x, y, finalX, finalY)){
+        return false;
+    }
+    eliminatePiece(finalX, finalY);
+    return true;
+
+}
+
+bool Chess::kingMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    }
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+    
+    if(stepX == 0 || stepY == 0){
+        if(abs(stepX) > 1 || abs(stepY) > 1){
+            return false;
+        }
+        eliminatePiece(finalX, finalY);
+        return true;
+    } else if(abs(stepX) == abs(stepY)){
+        if(abs(stepX) > 1){
+            return false;
+        }
+        eliminatePiece(finalX, finalY);
+        return true;
+    }
+    return false;
+    
+}
+
+bool Chess::knightMoves(int x, int y, int type,int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    }
+
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+
+    if(stepX == -1 && stepY == 2){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == -1 && stepY == -2){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == 1 && stepY == 2){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == 1 && stepY == -2){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == 2 && stepY == 1){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == 2 && stepY == -1){
+        eliminatePiece(finalX, finalY);
+    } else if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    } else if (stepX == -2 && stepY == 1){
+        eliminatePiece(finalX, finalY);
+    } else if (stepX == -2 && stepY == -1){
+        eliminatePiece(finalX, finalY);
+    } else {
+        return false;
+    }
+
+    return true;   
+
+}
+
+bool Chess::pawnMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    }
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+
+    if(stepY > 0 && type < 0){
+        return false;
+    }
+    if(stepY < 0 && type > 0){
+        return false;
+    }
+
+    if(stepY != 0 && emptySquare(finalX, finalY)){
+        return true;
+    }
+    if((abs(stepX) == abs(stepY)) && abs(stepY) == 1){
+        eliminatePiece(finalX, finalY);
+        return true;
+    }
+    return false;
+}
+
+bool Chess::queenMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;
+    }
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+
+    if(stepX == 0 || stepY == 0){
+        if(!checkLine(x, y, finalX, finalY)){
+            return false;
+        }
+        eliminatePiece(finalX, finalY);
+        return true;
+    } else if(abs(stepX) == abs(stepY)){
+        if(!checkDiagonal(x, y, finalX, finalY)){
+            return false;
+        }
+        eliminatePiece(finalX, finalY);
+        return true;
+    }
+    return false;
+
+}
+
+bool Chess::rookMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
+        return false;    
+    }
+
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+
+    if(stepX != 0 && stepY != 0){
+        return false;
+    }
+    
+    if(!checkLine(x, y, finalX, finalY)){
+        return false;
+    }
+    eliminatePiece(finalX, finalY);
+    return true;
+}
+
+bool Chess::checkDiagonal(int x, int y, int finalX, int finalY){
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+    int xInc = stepX/abs(stepX);
+    int yInc = stepY/abs(stepY);
+
+    for(int i = xInc; i < stepX; i += xInc){
+        for(int j = yInc; j < stepY; j += yInc){
+            if(!emptySquare(x+i, y+j)){
+                return false;
+            }
+        }
+    }
+    return true;
+
+}
+
+bool Chess::checkLine(int x, int y, int finalX, int finalY){
+    int stepX = finalX - x;
+    int stepY = finalY - y;
+    
+    if(stepY == 0){
+        int xInc = stepX/abs(stepX);
+        for(int i = xInc; i<stepX ; i+=xInc){
+            if(!emptySquare(x+i,y)){
+                return false;
+            }
+        }
+    } else {
+        int yInc = stepY/abs(stepY);
+        for(int i = yInc; i<stepY ; i+=yInc){
+            if(!emptySquare(x,y+i)){
+                return false;
+            }
+        }
+    }
+    return true;
+
+}
+
+bool Chess::emptySquare(int x, int y){
+    for(int i = 0; i < pieces.size(); i++){
+        if(pieces[i].getCoordinateX() == x && pieces[i].getCoordinateY() == y){
+            return true;
+        }
+    }
+    return false;
+}
+
+

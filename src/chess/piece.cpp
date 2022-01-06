@@ -8,8 +8,6 @@ Piece::Piece(int coordinateX, int coordinateY, int type) :
 
 Piece::~Piece(){}
 
-bool Piece::possibleMove(){}
-
 int Piece::getCoordinateX(){
     return coordinateX;
 }

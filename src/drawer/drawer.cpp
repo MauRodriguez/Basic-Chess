@@ -16,6 +16,8 @@ Drawer::Drawer(Chess& chess) :
 	chess(chess),
 	buttons(),
 	selectedPiece(0),
+	selectedPieceX(-1),
+	selectedPieceY(-1),
 	mousePressed(false),
 	mousePos({-1, -1})
 {
@@ -70,9 +72,7 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 	mousePos = { (e->motion.x) - 62, (e->motion.y) - 62};
 	SDL_Point mousePosOffset = { (e->motion.x) , (e->motion.y) };
 
-
 	//std::cout<<"mousePosition" << mousePos.x << " " << mousePos.y << std::endl;
-
 
 	//Mouse is inside button					
 	//Set mouse over sprite
@@ -94,17 +94,35 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 				SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
 								SQUARE_DIM, SQUARE_DIM};
 				if (SDL_PointInRect(&mousePosOffset, &rect)){
-					selectedPiece = buttons[i].getTextureType();					
+					selectedPiece = buttons[i].getTextureType();
+					selectedPieceX = rect.x/SQUARE_DIM;
+					selectedPieceY = rect.y/SQUARE_DIM;	
+					chess.eliminatePiece(selectedPieceX, selectedPieceY);				
 					break;
 				}
 			}
 		}
 		break;
 		
-		case SDL_MOUSEBUTTONUP:
-			mousePressed = false;
-			mousePos = {-1, -1};
-			selectedPiece = 0;
+		case SDL_MOUSEBUTTONUP:	
+		for(int i = 0; i < buttons.size(); i++){
+			SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
+							SQUARE_DIM, SQUARE_DIM};
+			if (SDL_PointInRect(&mousePosOffset, &rect)){										
+				if(chess.possibleMove(selectedPieceX, selectedPieceY, selectedPiece, rect.x/SQUARE_DIM, rect.y/SQUARE_DIM, buttons[i].getTextureType())){
+					//chess.bestMovement();
+				} else {
+					chess.addPiece(selectedPieceX, selectedPieceY, selectedPiece);
+				}
+				break;
+			}
+		}		
+
+		mousePressed = false;
+		mousePos = {-1, -1};
+		selectedPiece = 0;
+		selectedPieceX = -1;
+		selectedPieceY = -1;
 		break;
 	}		
 	

@@ -14,6 +14,8 @@ private:
     Chess& chess;
     std::vector<MButton> buttons;
     int selectedPiece;
+    int selectedPieceX;
+    int selectedPieceY;
     bool mousePressed;
     SDL_Point mousePos;
 public:

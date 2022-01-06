@@ -26,8 +26,6 @@ public:
 
     ~Piece();
 
-    bool possibleMove();
-
     int getCoordinateX();
 
     int getCoordinateY();
