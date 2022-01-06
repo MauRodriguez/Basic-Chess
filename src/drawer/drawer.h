@@ -18,6 +18,7 @@ private:
     int selectedPieceY;
     bool mousePressed;
     SDL_Point mousePos;
+    int prevButtonIdx;
 public:
     Drawer(Chess& chess);
 

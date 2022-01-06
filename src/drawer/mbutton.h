@@ -19,6 +19,8 @@ public:
 
     int getXPosition();
 
+    void setTextureType(int i);
+
     int getYPosition();
 
     int getTextureType();    

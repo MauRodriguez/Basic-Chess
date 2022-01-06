@@ -19,7 +19,8 @@ Drawer::Drawer(Chess& chess) :
 	selectedPieceX(-1),
 	selectedPieceY(-1),
 	mousePressed(false),
-	mousePos({-1, -1})
+	mousePos({-1, -1}),
+	prevButtonIdx(-1)
 {
     if (!initialize()) {
         std::cout << "[DRAWER] Error initializing SDL\n";
@@ -96,8 +97,9 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 				if (SDL_PointInRect(&mousePosOffset, &rect)){
 					selectedPiece = buttons[i].getTextureType();
 					selectedPieceX = rect.x/SQUARE_DIM;
-					selectedPieceY = rect.y/SQUARE_DIM;	
-					chess.eliminatePiece(selectedPieceX, selectedPieceY);				
+					selectedPieceY = YCoordinateConvertor(rect.y/SQUARE_DIM);
+					chess.eliminatePiece(selectedPieceX, selectedPieceY);
+					prevButtonIdx = i;				
 					break;
 				}
 			}
@@ -109,9 +111,13 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 			SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
 							SQUARE_DIM, SQUARE_DIM};
 			if (SDL_PointInRect(&mousePosOffset, &rect)){										
-				if(chess.possibleMove(selectedPieceX, selectedPieceY, selectedPiece, rect.x/SQUARE_DIM, rect.y/SQUARE_DIM, buttons[i].getTextureType())){
+				if(chess.possibleMove(selectedPieceX, selectedPieceY, selectedPiece, rect.x/SQUARE_DIM, YCoordinateConvertor(rect.y/SQUARE_DIM), buttons[i].getTextureType())){
+					buttons[prevButtonIdx].setTextureType(0);
+					buttons[i].setTextureType(selectedPiece);
+					chess.addPiece(rect.x/SQUARE_DIM, YCoordinateConvertor(rect.y/SQUARE_DIM), selectedPiece);
 					//chess.bestMovement();
 				} else {
+					std::cout<<"Agrego la pieza de nuevo\n";
 					chess.addPiece(selectedPieceX, selectedPieceY, selectedPiece);
 				}
 				break;
@@ -176,6 +182,7 @@ void Drawer::draw(){
 	render(0, 0, SCREEN_WIDTH, SCREEN_WIDTH,textures[0]);
 	
 	std::vector<Piece>& pieces = chess.getPieces();
+	//std::cout<< "PIECES LENGHT: " << pieces.size() << std::endl;
 
 	for(int i = 0; i < pieces.size(); i++){
 		switch(pieces[i].getType()){

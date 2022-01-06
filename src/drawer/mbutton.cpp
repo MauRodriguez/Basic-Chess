@@ -17,6 +17,10 @@ int MButton::getXPosition(){
 	return XPosition;
 }
 
+void MButton::setTextureType(int i){
+	currentTexture = i;
+}
+
 int MButton::getYPosition(){
 	return YPosition;
 }

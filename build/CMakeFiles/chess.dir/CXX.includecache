@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/mauricio/Documents/Chess/src/chess/piece.cpp
+/home/mauricio/Documents/Chess/src/chess/chess.cpp
+chess.h
+/home/mauricio/Documents/Chess/src/chess/chess.h
+piece.h
+/home/mauricio/Documents/Chess/src/chess/piece.h
+cmath
+-
+iostream
+-
+
+/home/mauricio/Documents/Chess/src/chess/chess.h
+vector
+-
 piece.h
 /home/mauricio/Documents/Chess/src/chess/piece.h
 

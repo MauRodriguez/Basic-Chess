@@ -1,6 +1,7 @@
 #include "chess.h"
 #include "piece.h"
 #include <cmath>
+#include <iostream>
 
 Chess::Chess(int colour) :
     colour(WHITE),
@@ -155,6 +156,8 @@ bool Chess::bishopMoves(int x, int y, int type, int finalX, int finalY, int fina
     int stepX = finalX - x;
     int stepY = finalY - y;
 
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
+
     if(abs(stepX) != abs(stepY)){
         return false;
     }
@@ -173,6 +176,8 @@ bool Chess::kingMoves(int x, int y, int type, int finalX, int finalY, int finalT
     }
     int stepX = finalX - x;
     int stepY = finalY - y;
+
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
     
     if(stepX == 0 || stepY == 0){
         if(abs(stepX) > 1 || abs(stepY) > 1){
@@ -199,6 +204,8 @@ bool Chess::knightMoves(int x, int y, int type,int finalX, int finalY, int final
     int stepX = finalX - x;
     int stepY = finalY - y;
 
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
+
     if(stepX == -1 && stepY == 2){
         eliminatePiece(finalX, finalY);
     } else if (stepX == -1 && stepY == -2){
@@ -211,8 +218,6 @@ bool Chess::knightMoves(int x, int y, int type,int finalX, int finalY, int final
         eliminatePiece(finalX, finalY);
     } else if (stepX == 2 && stepY == -1){
         eliminatePiece(finalX, finalY);
-    } else if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
-        return false;
     } else if (stepX == -2 && stepY == 1){
         eliminatePiece(finalX, finalY);
     } else if (stepX == -2 && stepY == -1){
@@ -226,11 +231,13 @@ bool Chess::knightMoves(int x, int y, int type,int finalX, int finalY, int final
 }
 
 bool Chess::pawnMoves(int x, int y, int type, int finalX, int finalY, int finalType){
+    std::cout<< "im a pawn";
     if((type > 0 && finalType > 0) || (type < 0 && finalType < 0)){
         return false;
     }
     int stepX = finalX - x;
     int stepY = finalY - y;
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
 
     if(stepY > 0 && type < 0){
         return false;
@@ -238,12 +245,16 @@ bool Chess::pawnMoves(int x, int y, int type, int finalX, int finalY, int finalT
     if(stepY < 0 && type > 0){
         return false;
     }
+    std::cout << "y" << y;
+    if((y == 1 || y == 6) && emptySquare(finalX, finalY) && abs(stepY) == 2){
+        return true;
+    }
 
-    if(stepY != 0 && emptySquare(finalX, finalY)){
+    if(abs(stepY) == 1 && emptySquare(finalX, finalY)){        
         return true;
     }
     if((abs(stepX) == abs(stepY)) && abs(stepY) == 1){
-        eliminatePiece(finalX, finalY);
+        eliminatePiece(finalX, finalY);        
         return true;
     }
     return false;
@@ -256,11 +267,13 @@ bool Chess::queenMoves(int x, int y, int type, int finalX, int finalY, int final
     int stepX = finalX - x;
     int stepY = finalY - y;
 
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
+
     if(stepX == 0 || stepY == 0){
         if(!checkLine(x, y, finalX, finalY)){
             return false;
         }
-        eliminatePiece(finalX, finalY);
+        eliminatePiece(finalX, finalY);        
         return true;
     } else if(abs(stepX) == abs(stepY)){
         if(!checkDiagonal(x, y, finalX, finalY)){
@@ -281,6 +294,8 @@ bool Chess::rookMoves(int x, int y, int type, int finalX, int finalY, int finalT
     int stepX = finalX - x;
     int stepY = finalY - y;
 
+    std::cout<<"step X:" << stepX << " stepY: " << stepY <<"\n";
+
     if(stepX != 0 && stepY != 0){
         return false;
     }
@@ -298,13 +313,20 @@ bool Chess::checkDiagonal(int x, int y, int finalX, int finalY){
     int xInc = stepX/abs(stepX);
     int yInc = stepY/abs(stepY);
 
-    for(int i = xInc; i < stepX; i += xInc){
-        for(int j = yInc; j < stepY; j += yInc){
-            if(!emptySquare(x+i, y+j)){
-                return false;
-            }
+    std::cout<<"xInc: " << xInc << " yInc: " << yInc <<"\n";
+    std::cout<<"stepX: " << stepX << " stepY: " << stepY <<"\n";
+
+    int i = xInc;
+    int j = yInc;
+    while(abs(i) < abs(stepX) && abs(j) < abs(stepY)){
+        std::cout<<"x + i:" << x+i << " y + j: " << y + j <<"\n";
+        if(!emptySquare(x+i, y+j)){
+            return false;
         }
+        i += xInc;
+        j += yInc;
     }
+    
     return true;
 
 }
@@ -315,14 +337,16 @@ bool Chess::checkLine(int x, int y, int finalX, int finalY){
     
     if(stepY == 0){
         int xInc = stepX/abs(stepX);
-        for(int i = xInc; i<stepX ; i+=xInc){
+        for(int i = xInc; abs(i)<abs(stepX) ; i+=xInc){
+            std::cout<<"x + i:" << x+i << " y: " << y <<"\n";
             if(!emptySquare(x+i,y)){
                 return false;
             }
         }
     } else {
         int yInc = stepY/abs(stepY);
-        for(int i = yInc; i<stepY ; i+=yInc){
+        for(int i = yInc; abs(i)<abs(stepY) ; i+=yInc){
+            std::cout<<"x:" << x << " y + i: " << y + i <<"\n";
             if(!emptySquare(x,y+i)){
                 return false;
             }
@@ -335,10 +359,10 @@ bool Chess::checkLine(int x, int y, int finalX, int finalY){
 bool Chess::emptySquare(int x, int y){
     for(int i = 0; i < pieces.size(); i++){
         if(pieces[i].getCoordinateX() == x && pieces[i].getCoordinateY() == y){
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 
