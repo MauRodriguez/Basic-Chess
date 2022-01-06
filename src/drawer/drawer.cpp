@@ -1,36 +1,45 @@
 #include "drawer.h"
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 #include "SDL2/SDL_image.h"
+#include "../chess/piece.h"
 //Screen dimension constants
 #define SCREEN_WIDTH 1000
-#define SCREEN_HEIGHT 1000 //8 * 125
+#define SCREEN_HEIGHT 1000 
+#define SQUARE_DIM 125 //8 * 125
 
-Drawer::Drawer() :
+Drawer::Drawer(Chess& chess) :
     gWindow(NULL),
     gRenderer(NULL),
-    gTexture(NULL),
-    textures()
+    textures(),
+	chess(chess)
 {
     if (!initialize()) {
         std::cout << "[DRAWER] Error initializing SDL\n";
     }
     
-    textures[1] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_bishop.png");
-    textures[2] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_king.png");
-    textures[3] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_knight.png");
-    textures[4] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_pawn.png");
-    textures[5] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_queen.png");
-    textures[6] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_rook.png");
+    textures[WHITE_BISHOP] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_bishop.png");
+    textures[WHITE_KING] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_king.png");
+    textures[WHITE_KNIGHT] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_knight.png");
+    textures[WHITE_PAWN] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_pawn.png");
+    textures[WHITE_QUEEN] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_queen.png");
+    textures[WHITE_ROOK] = loadTexture("/home/mauricio/Documents/Chess/sprites/white_rook.png");
 
     textures[0] = loadTexture("/home/mauricio/Documents/Chess/sprites/board.png");
 
-    textures[-1] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_bishop.png");
-    textures[-2] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_king.png");
-    textures[-3] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_knight.png");
-    textures[-4] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_pawn.png");
-    textures[-5] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_queen.png");
-    textures[-6] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_rook.png");
+    textures[BLACK_BISHOP] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_bishop.png");
+    textures[BLACK_KING] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_king.png");
+    textures[BLACK_KNIGHT] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_knight.png");
+    textures[BLACK_PAWN] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_pawn.png");
+    textures[BLACK_QUEEN] =loadTexture("/home/mauricio/Documents/Chess/sprites/black_queen.png");
+    textures[BLACK_ROOK] = loadTexture("/home/mauricio/Documents/Chess/sprites/black_rook.png");
+}
+
+//Convertion of YCoordinate from "chess-scale" to "sdl-scale"
+//y = -x + 7
+int YCoordinateConvertor(int i){  
+	return (-i + 7);
 }
 
 bool Drawer::initialize(){
@@ -77,10 +86,64 @@ void Drawer::draw(){
     //Clear screen
     SDL_RenderClear( gRenderer );
 
-	gTexture = textures[0];
+    //Render textures to screen
+	render(0, 0, SCREEN_WIDTH, SCREEN_WIDTH,textures[0]);
+	
+	std::vector<Piece>& pieces = chess.getPieces();
 
-    //Render texture to screen
-    SDL_RenderCopy( gRenderer, gTexture, NULL, NULL );
+	for(int i = 0; i < pieces.size(); i++){
+		switch(pieces[i].getType()){
+			case WHITE_BISHOP:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_BISHOP]);
+				break;
+			case WHITE_KING:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_KING]);
+				break;
+			case WHITE_KNIGHT:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_KNIGHT]);
+				break;
+			case WHITE_PAWN:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_PAWN]);
+				break;
+			case WHITE_QUEEN:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_QUEEN]);
+				break;
+			case WHITE_ROOK:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[WHITE_ROOK]);
+				break;
+			
+			case BLACK_BISHOP:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_BISHOP]);
+				break;
+			case BLACK_KING:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_KING]);
+				break;
+			case BLACK_KNIGHT:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_KNIGHT]);
+				break;
+			case BLACK_PAWN:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_PAWN]);
+				break;
+			case BLACK_QUEEN:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_QUEEN]);
+				break;
+			case BLACK_ROOK:
+				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+					SQUARE_DIM, SQUARE_DIM, textures[BLACK_ROOK]);
+				break;
+		}
+	}
 
     //Update screen
     SDL_RenderPresent( gRenderer );
@@ -88,8 +151,9 @@ void Drawer::draw(){
 
 void Drawer::destroy(){
     //Free loaded image
-	SDL_DestroyTexture( gTexture );
-	gTexture = NULL;
+	for(int i = -6; i < 7; i++){
+		SDL_DestroyTexture(textures[i]);
+	}		
 
 	//Destroy window	
 	SDL_DestroyRenderer( gRenderer );
@@ -130,4 +194,10 @@ SDL_Texture* Drawer::loadTexture( std::string path ){
 
 Drawer::~Drawer(){
     destroy();
+}
+
+void Drawer::render(int x, int y, int width, int height, SDL_Texture* texture){
+	SDL_Rect renderQuad = {x, y, width, height};
+
+	SDL_RenderCopy( gRenderer, texture, NULL, &renderQuad);
 }

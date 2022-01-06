@@ -22,6 +22,8 @@ public:
     void bestMovement();
 
     void hasWon();
+
+    std::vector<Piece>& getPieces();
 };
 
 #endif

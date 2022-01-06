@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game() : chess() ,drawer() {}
+Game::Game() : chess(1) ,drawer(chess) {}
 
 Game::~Game(){}
 

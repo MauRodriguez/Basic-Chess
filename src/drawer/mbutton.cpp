@@ -47,23 +47,18 @@ void MButton::handleEvent( SDL_Event* e )
 			switch( e->type )
 			{
 				case SDL_MOUSEMOTION:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
+				//mCurrentSprite = BUTTON_SPRITE_MOUSE_OVER_MOTION;
 				break;
 			
 				case SDL_MOUSEBUTTONDOWN:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
+				//mCurrentSprite = BUTTON_SPRITE_MOUSE_DOWN;
 				break;
 				
 				case SDL_MOUSEBUTTONUP:
-				mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
+				//mCurrentSprite = BUTTON_SPRITE_MOUSE_UP;
 				break;
 			}
 		}
 	}
 }
 	
-void Button::render()
-{
-	//Show current button sprite
-	gButtonSpriteSheetTexture.render( mPosition.x, mPosition.y, &gSpriteClips[ mCurrentSprite ] );
-}

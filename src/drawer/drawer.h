@@ -8,16 +8,18 @@ class Drawer {
 private:
     SDL_Window* gWindow;
     SDL_Renderer* gRenderer;
-    SDL_Texture* gTexture;
     std::map<char, SDL_Texture*> textures;
+    Chess& chess;
 public:
-    Drawer();
+    Drawer(Chess& chess);
 
     ~Drawer();
 
     bool initialize();
 
     void draw();
+
+    void render(int x, int y, int width, int height, SDL_Texture* texture);
 
     void destroy();
 

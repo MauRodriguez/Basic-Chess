@@ -7,8 +7,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -pedantic-errors -pthrea
 
 add_executable(Chess
         src/drawer/drawer.cpp
+        src/drawer/mbutton.cpp
+
         src/game/game.cpp
+
         src/chess/chess.cpp
+        src/chess/piece.cpp
         src/main.cpp
 )
 

@@ -28,5 +28,13 @@ public:
 
     bool possibleMove();
 
-    void move();
-}
+    int getCoordinateX();
+
+    int getCoordinateY();
+
+    int getType();
+
+    void move(int x, int y);
+};
+
+#endif

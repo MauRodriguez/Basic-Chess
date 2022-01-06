@@ -14,6 +14,10 @@ Chess::Chess(int colour) :
 
 Chess::~Chess(){}
 
+std::vector<Piece>& Chess::getPieces(){
+    return pieces;
+}
+
 void Chess::setWhiteBoard(){
     //white pieces
     Piece leftWRook(0, 0, WHITE_ROOK);
@@ -80,11 +84,6 @@ void Chess::setBlackBoard(){
     pieces.push_back(rightWKnight);
     Piece rightWRook(7, 7, WHITE_ROOK);
     pieces.push_back(rightWRook);
-    
-    for(int i = 0; i < 8; i++){
-        Piece WPawn(i, 6, WHITE_PAWN);
-        pieces.push_back(WPawn);
-    }
 
     //black pieces
     Piece leftBRook(0, 0, BLACK_ROOK);
@@ -110,6 +109,6 @@ void Chess::setBlackBoard(){
     }
 }
 
-void Chess::bestMovement();
+void Chess::bestMovement(){}
 
-void Chess::hasWon();
+void Chess::hasWon(){}
