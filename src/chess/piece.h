@@ -21,8 +21,9 @@ private:
     int coordinateX;
     int coordinateY;
     int type;
+    bool moved;
 public:
-    Piece(int coordinateX, int coordinateY, int type);
+    Piece(int coordinateX, int coordinateY, int type, bool moved);
 
     ~Piece();
 
@@ -31,6 +32,8 @@ public:
     int getCoordinateY();
 
     int getType();
+
+    bool hasMoved();
 
     void move(int x, int y);
 };

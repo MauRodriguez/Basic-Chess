@@ -37,6 +37,8 @@ public:
     SDL_Texture* loadTexture(std::string path);
 
     void initializeButtons();
+
+    void setButtons();
 };
 
 #endif

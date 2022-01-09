@@ -68,6 +68,25 @@ void Drawer::initializeButtons(){
 	}	
 }
 
+void Drawer::setButtons(){
+	std::vector<Piece>& pieces = chess.getPieces();
+
+	for(int i = 0; i < buttons.size(); i++){
+		buttons[i].setTextureType(0);
+	}
+
+	for(int i = 0; i < buttons.size(); i++){
+		for(int j = 0; j < pieces.size(); j++){
+			int xPiece = pieces[j].getCoordinateX() * SQUARE_DIM;
+			int yPiece = YCoordinateConvertor(pieces[j].getCoordinateY()) * SQUARE_DIM;
+			if(buttons[i].getXPosition() == xPiece && buttons[i].getYPosition() == yPiece){
+				buttons[i].setTextureType(pieces[j].getType());
+			}
+		}
+	}
+
+}
+
 void Drawer::handleMouseEvent( SDL_Event* e){
 
 	mousePos = { (e->motion.x) - 62, (e->motion.y) - 62};
@@ -90,7 +109,6 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 		if (!mousePressed && e->button.button == SDL_BUTTON_LEFT)
 		{			
 			mousePressed = true;
-			
 			for(int i = 0; i < buttons.size(); i++){
 				SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
 								SQUARE_DIM, SQUARE_DIM};
@@ -98,7 +116,7 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 					selectedPiece = buttons[i].getTextureType();
 					selectedPieceX = rect.x/SQUARE_DIM;
 					selectedPieceY = YCoordinateConvertor(rect.y/SQUARE_DIM);
-					chess.eliminatePiece(selectedPieceX, selectedPieceY);
+					buttons[i].setTextureType(0);
 					prevButtonIdx = i;				
 					break;
 				}
@@ -111,14 +129,11 @@ void Drawer::handleMouseEvent( SDL_Event* e){
 			SDL_Rect rect = {buttons[i].getXPosition(), buttons[i].getYPosition(),
 							SQUARE_DIM, SQUARE_DIM};
 			if (SDL_PointInRect(&mousePosOffset, &rect)){										
-				if(chess.possibleMove(selectedPieceX, selectedPieceY, selectedPiece, rect.x/SQUARE_DIM, YCoordinateConvertor(rect.y/SQUARE_DIM), buttons[i].getTextureType())){
-					buttons[prevButtonIdx].setTextureType(0);
-					buttons[i].setTextureType(selectedPiece);
-					chess.addPiece(rect.x/SQUARE_DIM, YCoordinateConvertor(rect.y/SQUARE_DIM), selectedPiece);
+				if(chess.tryToMove(selectedPieceX, selectedPieceY, selectedPiece, rect.x/SQUARE_DIM, YCoordinateConvertor(rect.y/SQUARE_DIM), buttons[i].getTextureType())){
 					//chess.bestMovement();
+					setButtons();					
 				} else {
-					std::cout<<"Agrego la pieza de nuevo\n";
-					chess.addPiece(selectedPieceX, selectedPieceY, selectedPiece);
+					buttons[prevButtonIdx].setTextureType(selectedPiece);
 				}
 				break;
 			}
@@ -180,59 +195,57 @@ void Drawer::draw(){
 
     //Render textures to screen
 	render(0, 0, SCREEN_WIDTH, SCREEN_WIDTH,textures[0]);
-	
-	std::vector<Piece>& pieces = chess.getPieces();
 	//std::cout<< "PIECES LENGHT: " << pieces.size() << std::endl;
 
-	for(int i = 0; i < pieces.size(); i++){
-		switch(pieces[i].getType()){
+	for(int i = 0; i < buttons.size(); i++){
+		switch(buttons[i].getTextureType()){
 			case WHITE_BISHOP:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_BISHOP]);
 				break;
 			case WHITE_KING:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_KING]);
 				break;
 			case WHITE_KNIGHT:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_KNIGHT]);
 				break;
 			case WHITE_PAWN:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_PAWN]);
 				break;
 			case WHITE_QUEEN:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_QUEEN]);
 				break;
 			case WHITE_ROOK:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[WHITE_ROOK]);
 				break;
 			
 			case BLACK_BISHOP:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_BISHOP]);
 				break;
 			case BLACK_KING:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_KING]);
 				break;
 			case BLACK_KNIGHT:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_KNIGHT]);
 				break;
 			case BLACK_PAWN:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_PAWN]);
 				break;
 			case BLACK_QUEEN:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_QUEEN]);
 				break;
 			case BLACK_ROOK:
-				render(pieces[i].getCoordinateX() * SQUARE_DIM, YCoordinateConvertor(pieces[i].getCoordinateY()) * SQUARE_DIM,
+				render(buttons[i].getXPosition(), buttons[i].getYPosition(),
 					SQUARE_DIM, SQUARE_DIM, textures[BLACK_ROOK]);
 				break;
 		}
